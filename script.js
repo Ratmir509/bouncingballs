@@ -2,7 +2,7 @@ let balls = [];
 let circleRadius;
 const ballRadius = 20;
 const gravity = 0.1;
-const protectionTime = 300; // 0.3 секунды защиты от исчезновения
+const protectionTime = 200; // 0.2 секунды защиты от исчезновения
 let restartButton; // Кнопка для перезапуска
 
 function setup() {
@@ -124,18 +124,17 @@ class Ball {
   }
 }
 
-// Устанавливаем стиль кнопки
+// Проверка устройства и адаптивность кнопки
 function styleButton(button) {
-  button.style("font-size", "24px");
+  button.style("font-size", isMobileDevice() ? "18px" : "24px");
   button.style("font-weight", "bold");
   button.style("background-color", "#ff7f50");
   button.style("color", "#ffffff");
   button.style("border", "none");
-  button.style("padding", "15px 30px");
+  button.style("padding", isMobileDevice() ? "10px 20px" : "15px 30px");
   button.style("border-radius", "10px");
 }
 
-// Позиционируем кнопку по центру круга
 function positionButton() {
   restartButton.position(width / 2.15 - restartButton.width / 2, height / 2 - restartButton.height / 2);
 }
@@ -144,4 +143,9 @@ function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
   circleRadius = min(width, height) * 0.4;
   positionButton();
+}
+
+// Проверка на мобильное устройство
+function isMobileDevice() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
