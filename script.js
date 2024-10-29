@@ -1,13 +1,13 @@
 let balls = [];
 let circleRadius;
-let ballRadius = isMobileDevice() ? 13 : 20; // Радиус шарика больше на мобильных устройствах, но меньше, чем на ПК
+let ballRadius;
 const gravity = 0.1;
 const protectionTime = 200; // 0.2 секунды защиты от исчезновения
 let restartButton; // Кнопка для перезапуска
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  circleRadius = min(width, height) * 0.4;
+  setupSizes();
   addBall();
 
   // Создаем кнопку для перезапуска
@@ -19,10 +19,8 @@ function setup() {
 }
 
 function draw() {
-  // Закрашиваем фон с прозрачностью, чтобы оставить след
   background(240, 240, 240, 50);
 
-  // Рисуем круг с толстой линией
   noFill();
   stroke(0);
   strokeWeight(6);
@@ -47,11 +45,21 @@ function draw() {
     }
   }
 
-  // Показываем кнопку, если все шарики исчезли
   if (balls.length === 0) {
     restartButton.show();
   } else {
     restartButton.hide();
+  }
+}
+
+function setupSizes() {
+  // Устанавливаем размеры в зависимости от устройства
+  if (isMobileDevice()) {
+    circleRadius = min(width, height) * 0.3;
+    ballRadius = 13; // Радиус шариков для мобильных устройств
+  } else {
+    circleRadius = min(width, height) * 0.4;
+    ballRadius = 20; // Радиус шариков для ПК
   }
 }
 
@@ -141,11 +149,10 @@ function positionButton() {
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
-  circleRadius = min(width, height) * 0.4;
+  setupSizes();
   positionButton();
 }
 
-// Проверка на мобильное устройство
 function isMobileDevice() {
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  return windowWidth < 800;
 }
