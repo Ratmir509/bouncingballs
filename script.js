@@ -1,6 +1,6 @@
 let balls = [];
 let circleRadius;
-let ballRadius = isMobileDevice() ? 15 : 20; // Радиус шарика больше на мобильных устройствах, но меньше, чем на ПК
+let ballRadius = isMobileDevice() ? 13 : 20; // Радиус шарика больше на мобильных устройствах, но меньше, чем на ПК
 const gravity = 0.1;
 const protectionTime = 200; // 0.2 секунды защиты от исчезновения
 let restartButton; // Кнопка для перезапуска
