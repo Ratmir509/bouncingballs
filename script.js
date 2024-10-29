@@ -1,13 +1,13 @@
 let balls = [];
 let circleRadius;
-let ballRadius;
+const ballRadius = isMobileDevice() ? 13 : 20; // Размер шариков на мобильных устройствах меньше
 const gravity = 0.1;
 const protectionTime = 200; // 0.2 секунды защиты от исчезновения
-let restartButton; // Кнопка для перезапуска
+let restartButton;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  setupSizes();
+  adjustCircleRadius();
   addBall();
 
   // Создаем кнопку для перезапуска
@@ -21,6 +21,7 @@ function setup() {
 function draw() {
   background(240, 240, 240, 50);
 
+  // Рисуем круг с толстой линией
   noFill();
   stroke(0);
   strokeWeight(6);
@@ -45,21 +46,11 @@ function draw() {
     }
   }
 
+  // Показываем кнопку, если все шарики исчезли
   if (balls.length === 0) {
     restartButton.show();
   } else {
     restartButton.hide();
-  }
-}
-
-function setupSizes() {
-  // Устанавливаем размеры в зависимости от устройства
-  if (isMobileDevice()) {
-    circleRadius = min(width, height) * 0.3;
-    ballRadius = 13; // Радиус шариков для мобильных устройств
-  } else {
-    circleRadius = min(width, height) * 0.4;
-    ballRadius = 20; // Радиус шариков для ПК
   }
 }
 
@@ -74,6 +65,7 @@ function restartGame() {
   addBall();
 }
 
+// Класс шарика
 class Ball {
   constructor(x, y, r) {
     this.pos = createVector(x, y);
@@ -132,6 +124,15 @@ class Ball {
   }
 }
 
+// Адаптация радиуса круга для мобильных устройств
+function adjustCircleRadius() {
+  if (isMobileDevice()) {
+    circleRadius = min(width, height) * 0.5; // Увеличенный размер круга для мобильных
+  } else {
+    circleRadius = min(width, height) * 0.4; // Стандартный размер круга для ПК
+  }
+}
+
 // Проверка устройства и адаптивность кнопки
 function styleButton(button) {
   button.style("font-size", isMobileDevice() ? "18px" : "24px");
@@ -149,10 +150,11 @@ function positionButton() {
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
-  setupSizes();
+  adjustCircleRadius();
   positionButton();
 }
 
+// Проверка на мобильное устройство
 function isMobileDevice() {
-  return windowWidth < 800;
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
